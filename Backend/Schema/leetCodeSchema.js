@@ -59,63 +59,24 @@ registerSchema.methods.genJWTtoken = async function () {
     console.error(error);
   }
 };
+const userSchema = new mongoose.model("leetcodeDashboard_users", registerSchema);
 
-const dbSchema = new mongoose.model("leetcodeDashboard_users", registerSchema);
 
-const leetcodeStats = new mongoose.Schema({
+
+const fetchUserDataLC = new mongoose.Schema({
   userId: {
-    type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'dbSchema' }]
+    type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'userSchema' }]
   },
-  total_Solved: {
-    type: Number,
-    require: true,
-  },
-  total_Questions: {
-    type: Number,
-    require: true,
-  },
-  total_Questions_EASY: {
-    type: Number,
-    require: true,
-  },
-  total_Questions_MEDIUM: {
-    type: Number,
-    require: true,
-  },
-  total_Questions_HARD: {
-    type: Number,
-    require: true,
-  },
-  total_Solved_EASY: {
-    type: Number,
-    require: true,
-  },
-  total_Solved_MEDIUM: {
-    type: Number,
-    require: true,
-  },
-  total_Solved_HARD: {
-    type: Number,
-    require: true,
-  },
-  acceptance_rate: {
-    type: Number,
-    require: true,
-  },
-  Ranking: {
-    type: Number,
-    require: true,
-  },
-  submissions: {
+  userStats: {
     type: Object,
     require: true,
   },
-  updatedTime: {
+  FetchDate: {
     type: String,
     require: true,
   },
-});
+})
+const LeetcodeUserDataSchema = new mongoose.model("userLeetcodeData", fetchUserDataLC);
 
-const userStatsSchema = new mongoose.model("user_stats", leetcodeStats);
 
-module.exports = { dbSchema, userStatsSchema };
+module.exports = { userSchema , LeetcodeUserDataSchema };
