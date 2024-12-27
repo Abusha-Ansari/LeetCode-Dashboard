@@ -1,5 +1,5 @@
-import * as React from "react"
-import { GalleryVerticalEnd } from "lucide-react"
+import * as React from "react";
+import { GalleryVerticalEnd } from "lucide-react";
 
 import {
   Sidebar,
@@ -13,10 +13,9 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
   SidebarRail,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
 import { Link } from "react-router-dom";
 
-// This is sample data.
 const data = {
   navMain: [
     {
@@ -38,27 +37,28 @@ const data = {
     {
       title: "Sign-Up",
       url: "signin",
+    },,
+    {
+      title: "Dashboard",
+      url: "dashboard",
     },
   ],
-}
+};
 
-export function AppSidebar({
-  ...props
-}) {
+export function AppSidebar({ ...props }) {
   return (
-    (<Sidebar {...props}>
+    <Sidebar {...props}>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <a href="#">
-                <div
-                  className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+              <a href="/">
+                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                   <GalleryVerticalEnd className="size-4" />
                 </div>
                 <div className="flex flex-col gap-0.5 leading-none">
-                  <span className="font-semibold">LeetDash-USER</span>
-                  <span className="">v1.0.0</span>
+                  <span className="font-medium text-lg">LeetDash-USER</span>
+                  <span className="text-sm">v1.0.0</span>
                 </div>
               </a>
             </SidebarMenuButton>
@@ -71,30 +71,25 @@ export function AppSidebar({
             {data.navMain.map((item) => (
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton asChild>
-                  {/* <a href={item.url} className="font-medium">
-                    {item.title}
-                  </a> */}
-                  <div>
-                  <Link to={`${item.url}`} className="font-medium" >{item.title}</Link>
-                  </div>
+                  <Link to={`${item.url}`} className="">
+                    <div className="text-lg">{item.title}</div>
+                  </Link>
                 </SidebarMenuButton>
-                {/* {item.items?.length ? (
-                  <SidebarMenuSub>
-                    {item.items.map((item) => (
-                      <SidebarMenuSubItem key={item.title}>
-                        <SidebarMenuSubButton asChild isActive={item.isActive}>
-                          <a href={item.url}>{item.title}</a>
-                        </SidebarMenuSubButton>
-                      </SidebarMenuSubItem>
-                    ))}
-                  </SidebarMenuSub>
-                ) : null} */}
               </SidebarMenuItem>
             ))}
+            {/* To add extra buttons in sidebar */}
+            {/* <SidebarMenuItem> */}
+            <SidebarMenuButton>
+              <Link to={`test`} className="">
+                <div className="text-lg">test</div>
+              </Link>
+            </SidebarMenuButton>
+            {/* </SidebarMenuItem> */}
+            {/* till here */}
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
       <SidebarRail />
-    </Sidebar>)
+    </Sidebar>
   );
 }

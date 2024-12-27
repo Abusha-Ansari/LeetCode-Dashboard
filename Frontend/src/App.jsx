@@ -6,6 +6,7 @@ import Home from './pages/Home';
 import About from './pages/About';
 import AddProfile from "./pages/AddProfile";
 import Page from './app/dashboard/page';
+import Dashboard from './pages/Dashboard';
 
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signin" element={<SignupPage />} />
           <Route path="/addprofile" element={<AddProfile />} />
+          <Route path='/dashboard' element={<Dashboard />}/>
         </Route>
       </Routes>
     </Router>

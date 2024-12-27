@@ -5,7 +5,6 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import Header from "@/ownComponents/Header";
 import { Outlet } from "react-router-dom";
 
 function Page() {
@@ -13,15 +12,20 @@ function Page() {
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <header className="flex h-[4rem] items-center gap-2 border-b">
-          <div className="flex items-center gap-2 px-3">
+        <header className="flex h-[5rem] items-center justify-between border-b px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center gap-2">
             <SidebarTrigger />
           </div>
-          <span className="fixed left-[45%]">Welcome to LeetDash!</span>
-          <div className="fixed right-1">
+
+          <span className="text-xl font-bold text-center flex-1 sm:text-2xl lg:text-4xl xl:text-5xl">
+            Welcome to LeetDash!
+          </span>
+
+          <div className="flex items-center">
             <ModeToggle />
           </div>
         </header>
+
         <div className="flex items-center justify-center flex-col flex-grow">
           <Outlet />
         </div>

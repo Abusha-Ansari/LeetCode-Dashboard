@@ -20,8 +20,8 @@ app.use(cors(corsOptions))
 
 // Routes
 app.route('/').get(Home)
-app.route('/getUserStats').get(fetchUserData);
-app.route('/login').get(login);
+app.route('/getUserStats').post(fetchUserData);
+app.route('/login').post(login);
 
 app.route('/signup').post(signup);
 

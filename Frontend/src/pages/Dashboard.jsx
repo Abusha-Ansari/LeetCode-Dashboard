@@ -1,15 +1,16 @@
 import GraphStats from '@/ownComponents/GraphStats'
-import AddUserLcINPUT_BOX from '@/ownComponents/LcAccINPUT'
+import Header from '@/ownComponents/Header'
 import React from 'react'
 
-function AddProfile() {
-  
+function Dashboard() {
   return (
     <div className='w-full max-w-[80rem] mx-auto flex flex-col gap-4'>
-    <AddUserLcINPUT_BOX/>
-    <GraphStats/>
+    <GraphStats />
+    {/* <Header/> */}
+    {/* <GraphStats/> */}
     </div>
+
   )
 }
 
-export default AddProfile
+export default Dashboard

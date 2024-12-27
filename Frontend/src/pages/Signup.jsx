@@ -31,12 +31,22 @@ function SignupPage() {
     college: "",
   });
 
-  const handleSubmit = (event) => {
-    event.preventDefault(); // Prevent default form submission behavior
-    console.log("Form Data:", formData);
-    // Add your submission logic here (e.g., send data to an API)
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const BackendUrl = import.meta.env.VITE_BACKEND_URL;
+      const response = await fetch(`${BackendUrl}/${"signup"}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
-
+      response.json().then((data) => console.log(data));
+    } catch (error) {
+      console.error(error);
+    }
     setFormData({
       username: "",
       email: "",

@@ -57,7 +57,7 @@ const fetchUserData = async (req, res) => {
 
         const FinalUserData = new userStatsSchema(Format_Details);
         await FinalUserData.save();
-        return res.status(200).send("Data added successfully");
+        return res.status(200).send({message:"Data fetched succesfully", data:Format_Details});
       } else
         res
           .status(404)

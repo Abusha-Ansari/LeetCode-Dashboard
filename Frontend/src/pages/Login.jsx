@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
 import { Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,33 +12,60 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 function LoginPage() {
   const [isVisible, setIsVisible] = useState(false);
-
   const toggleVisibility = () => setIsVisible((prevState) => !prevState);
 
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+  const [Theme, setTheme] = useState(() => {
+    return localStorage.getItem("vite-ui-theme");
+  });
+  const [clicked, setClicked] = useState(false);
 
-  const handleSubmit = (event) => {
-    event.preventDefault(); // Prevent default form submission behavior
-    console.log("Form Data:", formData);
-    // Add your submission logic here (e.g., send data to an API)
-
-    setFormData({
-      email: "",
-      password: "",
+  const notify = (message) =>
+    toast.success(`${message}`, {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: `${Theme}`,
     });
+    
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const BackendUrl = import.meta.env.VITE_BACKEND_URL;
+      const response = await fetch(`${BackendUrl}/${"login"}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      response.json().then((data) => {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("user_id", data.user_id);
+        if (data.user_id) {
+          notify("Login Succesfull");
+        } else {
+          console.error(data.message);
+        }
+      });
+      setFormData({
+        email: "",
+        password: "",
+      });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleInputChange = (e) => {
@@ -49,7 +77,7 @@ function LoginPage() {
   };
 
   return (
-    
+    <>
       <Card className="w-[400px] mr-[20px]">
         <CardHeader>
           <CardTitle>Login</CardTitle>
@@ -94,12 +122,24 @@ function LoginPage() {
                   </button>
                 </div>
               </div>
-              <Button type="submit">Login</Button>
+              <Button type={clicked? "":"submit"} onClick={()=>{setClicked(true)}}>Login</Button>
             </div>
           </form>
         </CardContent>
       </Card>
-    
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme={`${Theme}`}
+      />
+    </>
   );
 }
 
