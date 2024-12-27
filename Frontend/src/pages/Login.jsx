@@ -41,6 +41,7 @@ function LoginPage() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
+      setClicked(true);
       const BackendUrl = import.meta.env.VITE_BACKEND_URL;
       const response = await fetch(`${BackendUrl}/${"login"}`, {
         method: "POST",
@@ -50,21 +51,28 @@ function LoginPage() {
         body: JSON.stringify(formData),
       });
 
-      response.json().then((data) => {
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("user_id", data.user_id);
-        if (data.user_id) {
-          notify("Login Succesfull");
-        } else {
-          console.error(data.message);
-        }
-      });
+      if(response.status === 200){
+        response.json().then((data) => {
+          localStorage.setItem("token", data.token);
+          localStorage.setItem("user_id", data.user_id);
+          if (data.user_id) {
+            notify("Login Succesfull");
+          } else {
+            console.error(data.message);
+          }
+        });
+      } else{
+        setClicked(false);
+        notify("Login was not Succesfull")
+      }
+      
       setFormData({
         email: "",
         password: "",
       });
     } catch (error) {
       console.error(error);
+      setClicked(false);
     }
   };
 
@@ -122,7 +130,7 @@ function LoginPage() {
                   </button>
                 </div>
               </div>
-              <Button type={clicked? "":"submit"} onClick={()=>{setClicked(true)}}>Login</Button>
+              <Button disable={clicked} type={clicked? "":"submit"}>Login</Button>
             </div>
           </form>
         </CardContent>

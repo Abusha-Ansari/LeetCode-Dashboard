@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
 import { Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,6 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+
 function SignupPage() {
   const [isVisible, setIsVisible] = useState(false);
 
@@ -31,7 +33,24 @@ function SignupPage() {
     college: "",
   });
 
+  const [clicked, setClicked] = useState(false);
+  const [Theme, setTheme] = useState(() => {
+      return localStorage.getItem("vite-ui-theme");
+    });
+  const notify = (message) =>
+    toast.success(`${message}`, {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: `${Theme}`,
+    });
+
   const handleSubmit = async (event) => {
+    setClicked(true);
     event.preventDefault();
     try {
       const BackendUrl = import.meta.env.VITE_BACKEND_URL;
@@ -42,10 +61,18 @@ function SignupPage() {
         },
         body: JSON.stringify(formData),
       });
+      console.log(response)
+      if(response.status == 200){
+        response.json().then((data) => notify(data.message));
+        setClicked(true)
+      } else{
+        notify("Error Signing up Retry sign up")
+        setClicked(false)
+      }
 
-      response.json().then((data) => console.log(data));
     } catch (error) {
       console.error(error);
+      setClicked(false)
     }
     setFormData({
       username: "",
@@ -71,6 +98,8 @@ function SignupPage() {
   };
 
   return (
+    <>
+    
     <Card className="w-[350px] mr-[20px]">
       <CardHeader>
         <CardTitle>Signup</CardTitle>
@@ -147,11 +176,24 @@ function SignupPage() {
                 </SelectContent>
               </Select>
             </div>
-            <Button type="submit">Sign Up</Button>
+            <Button disable={clicked} type="submit">Sign Up</Button>
           </div>
         </form>
       </CardContent>
     </Card>
+    <ToastContainer
+            position="bottom-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick={false}
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme={`${Theme}`}
+          />
+    </>
   );
 }
 
