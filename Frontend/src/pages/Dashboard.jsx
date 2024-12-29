@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import GraphStats from "@/ownComponents/GraphStats";
 import SolvedChart from "@/ownComponents/SolvedChart";
 import { LeetCodeContext } from "@/context/UserContext";
@@ -6,15 +6,7 @@ import SubmissionChart from "@/ownComponents/SubmissionStats";
 
 function Dashboard() {
   const { userStats } = useContext(LeetCodeContext);
-  const [data, setData] = useState(null);
-  useEffect(() => {
-    const fetchingDataUsingASYNC = async () => {
-      const data = await userStats;
-      setData(data);
-      console.log(data);
-    };
-    fetchingDataUsingASYNC();
-  }, []); 
+  const data = userStats; 
 
   return (
     <>

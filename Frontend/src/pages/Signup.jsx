@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -27,7 +27,6 @@ function SignupPage() {
    
   const toggleVisibility = () => setIsVisible((prevState) => !prevState);
 
-  const {UserData , setUserdata} = useContext(LeetCodeContext);
 
   const [formData, setFormData] = useState({
     username: "",
@@ -70,10 +69,6 @@ function SignupPage() {
       if(response.status == 200){
         response.json().then((data) => notify(data.message));
         setClicked(true)
-        console.log("formdata: " , formData)
-        setUserdata((prev) => ({...prev , name: formData.username , email: formData.email , college: formData.email}))
-
-        console.log("after changes: " , UserData)
       } else{
         notify("Error Signing up Retry sign up")
         setClicked(false)

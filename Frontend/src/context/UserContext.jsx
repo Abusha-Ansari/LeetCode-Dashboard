@@ -4,59 +4,87 @@ import { createContext, useState, useEffect } from "react";
 export const LeetCodeContext = createContext();
 
 export const LeetCodeProvider = ({ children }) => {
+  // const fetchFromDB = async () => {
+  //   if (loggedIn) {
+  //     const user_id = localStorage.getItem("user_id");
+  //     const BackendUrl = import.meta.env.VITE_BACKEND_URL;
+  //     try {
+  //       if (!user_id) {
+  //         console.error("Login first");
+  //         return;
+  //       }
+  //       // const response = await axios.get(
+  //       //   `${BackendUrl}/getuserdata/${user_id}`
+  //       // );
 
-const [loggedIn, setloggedIn] = useState(
+  //       const response = await fetch(`${BackendUrl}/getuserdata/${user_id}`, {
+  //         method: "GET",
+  //       });
+
+  //       // if (response.status == 200) {
+  //       //   return response.data.data.userStats;
+  //       // }
+
+  //       const data = await response.json();
+  //       setUserStats(data);
+
+
+  //       return;
+  //     } catch (error) {
+  //       return {}
+  //     }
+  //   } else {
+  //     return {};
+  //   }
+  // };
+
+  const [loggedIn, setloggedIn] = useState(
     localStorage.getItem("token") ? true : false
   );
 
-const [UserData, setUserdata] = useState({
-    name: "",
-    LcUsername: "",
-    email: "",
-    college: "",
-    user_id: "",
-  });
+  const [AccounName, setAccounName] = useState("");
+
+  const [userStats, setUserStats] = useState();
 
 
-const [AccounName, setAccounName] = useState("");
-
-const fetchFromDB = async () => {
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const token = localStorage.getItem("token");
         const user_id = localStorage.getItem("user_id");
         const BackendUrl = import.meta.env.VITE_BACKEND_URL;
-        try {
-          if (!user_id) {
-            console.error("Login first");
-            return;
-          }
-          const response = await axios.get(`${BackendUrl}/getuserdata/${user_id}`);
 
-          if (response.status == 200) {
-    
-            return response.data.data.userStats;
-          }
-          return;
-        } catch (error) {
-          return console.error(error);
-        };
-      };
+        if (!token) {
+          throw new Error("No token found. Please log in.");
+        }
 
-const [userStats, setUserStats] = useState(fetchFromDB);
+        const response = await fetch(`${BackendUrl}/getuserdata/${user_id}`, {
+          method: "GET",
+        });
 
-    useEffect(() => {
-      async function getLatestData () {
-        setUserStats(fetchFromDB);
-      }
-      getLatestData();
-    }, [loggedIn]);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+
+        const data = await response.json()
+        setUserStats(data.data.userStats);
+
+        if (!userStats) {
+          setloggedIn(false);
+        }
+      } catch (error) {}
+    };
+
+    fetchUserData();
+  }, [loggedIn]);
 
   return (
     <LeetCodeContext.Provider
       value={{
-        fetchFromDB,
+        // fetchFromDB,
         loggedIn,
         setloggedIn,
-        UserData,
-        setUserdata,
         AccounName,
         setAccounName,
         userStats,
