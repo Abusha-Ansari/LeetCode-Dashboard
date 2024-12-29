@@ -9,43 +9,35 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
-  SidebarMenuSubItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { Link } from "react-router-dom";
-
-const data = {
-  navMain: [
-    {
-      title: "Home",
-      url: "",
-    },
-    {
-      title: "AddProfile",
-      url: "addprofile",
-    },
-    {
-      title: "About",
-      url: "about",
-    },
-    {
-      title: "Login",
-      url: "login",
-    },
-    {
-      title: "Sign-Up",
-      url: "signin",
-    },,
-    {
-      title: "Dashboard",
-      url: "dashboard",
-    },
-  ],
-};
+import { LeetCodeContext } from "@/context/UserContext";
 
 export function AppSidebar({ ...props }) {
+  const data = {
+    navMain: [
+      {
+        title: "Home",
+        url: "",
+      },
+      {
+        title: "AddProfile",
+        url: "addprofile",
+      },
+      {
+        title: "About",
+        url: "about",
+      },
+      {
+        title: "Dashboard",
+        url: "dashboard",
+      },
+    ],
+  };
+
+  const { loggedIn } = React.useContext(LeetCodeContext);
+
   return (
     <Sidebar {...props}>
       <SidebarHeader>
@@ -79,11 +71,20 @@ export function AppSidebar({ ...props }) {
             ))}
             {/* To add extra buttons in sidebar */}
             {/* <SidebarMenuItem> */}
-            <SidebarMenuButton>
-              <Link to={`test`} className="">
-                <div className="text-lg">test</div>
-              </Link>
-            </SidebarMenuButton>
+            {!loggedIn && (
+              <>
+                <SidebarMenuButton>
+                  <Link to="login" className="">
+                    <div className="text-lg">Login</div>
+                  </Link>
+                </SidebarMenuButton>
+                <SidebarMenuButton>
+                  <Link to="signin" className="">
+                    <div className="text-lg">Sign Up</div>
+                  </Link>
+                </SidebarMenuButton>
+              </>
+            )}
             {/* </SidebarMenuItem> */}
             {/* till here */}
           </SidebarMenu>

@@ -70,14 +70,16 @@ export const LeetCodeProvider = ({ children }) => {
         const data = await response.json()
         setUserStats(data.data.userStats);
 
-        if (!userStats) {
-          setloggedIn(false);
-        }
       } catch (error) {}
     };
 
     fetchUserData();
   }, [loggedIn]);
+
+  const Logout = () => {
+    localStorage.removeItem('token')
+    setloggedIn(false)
+}
 
   return (
     <LeetCodeContext.Provider
@@ -89,6 +91,7 @@ export const LeetCodeProvider = ({ children }) => {
         setAccounName,
         userStats,
         setUserStats,
+        Logout,
       }}
     >
       {children}
