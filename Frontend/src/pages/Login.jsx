@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -12,19 +12,26 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { LeetCodeContext } from "@/context/UserContext";
 
 function LoginPage() {
+  
   const [isVisible, setIsVisible] = useState(false);
+  
   const toggleVisibility = () => setIsVisible((prevState) => !prevState);
 
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+
   const [Theme, setTheme] = useState(() => {
     return localStorage.getItem("vite-ui-theme");
   });
+
   const [clicked, setClicked] = useState(false);
+
+  const { loggedIn, setloggedIn } = useContext(LeetCodeContext);
 
   const notify = (message) =>
     toast.success(`${message}`, {
@@ -37,7 +44,7 @@ function LoginPage() {
       progress: undefined,
       theme: `${Theme}`,
     });
-    
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
@@ -51,21 +58,23 @@ function LoginPage() {
         body: JSON.stringify(formData),
       });
 
-      if(response.status === 200){
+      if (response.status === 200) {
         response.json().then((data) => {
           localStorage.setItem("token", data.token);
           localStorage.setItem("user_id", data.user_id);
+
           if (data.user_id) {
             notify("Login Succesfull");
+            setloggedIn(true);
           } else {
             console.error(data.message);
           }
         });
-      } else{
+      } else {
         setClicked(false);
-        notify("Login was not Succesfull")
+        notify("Login was not Succesfull");
       }
-      
+
       setFormData({
         email: "",
         password: "",
@@ -130,7 +139,9 @@ function LoginPage() {
                   </button>
                 </div>
               </div>
-              <Button disable={clicked} type={clicked? "":"submit"}>Login</Button>
+              <Button disable={clicked} type={clicked ? "" : "submit"}>
+                Login
+              </Button>
             </div>
           </form>
         </CardContent>

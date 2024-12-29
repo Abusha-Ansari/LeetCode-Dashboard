@@ -5,9 +5,22 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import { LeetCodeContext } from "@/context/UserContext";
+import { useContext, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 
 function Page() {
+
+  const {userStats , loggedIn} = useContext(LeetCodeContext);
+  
+  useEffect(() => {
+     const test = async () => {
+      const data = await userStats;
+      console.log(data)
+    }
+    test();
+  }, [loggedIn])
+
   return (
     <SidebarProvider>
       <AppSidebar />

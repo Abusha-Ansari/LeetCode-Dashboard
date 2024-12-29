@@ -86,13 +86,54 @@ const login = async (req, res) => {
   }
 };
 
+// const GetUserProfile = async (req, res) => {
+//   const { username, id } = req.params;
+
+//   try {
+//     const userData = await axios.get(
+//       `https://alfa-leetcode-api.onrender.com/userProfile/${username}`
+//     );
+//     if (userData) {
+//       const data = {
+//         userId: id,
+//         userStats: userData.data,
+//         FetchDate: new Date().toLocaleString("en-US", {
+//           year: "numeric",
+//           month: "2-digit",
+//           day: "2-digit",
+//           hour: "2-digit",
+//           minute: "2-digit",
+//           second: "2-digit",
+//           hour12: true,
+//           timeZone: "Asia/Kolkata",
+//         }),
+//       };
+//       const saveData = new LeetcodeUserDataSchema(data);
+//       await saveData.save();
+//       res.status(200).send({
+//         message: "User Data Fetched Succesfully",
+//         response: userData.data,
+//       });
+//     }
+//     res
+//       .status(404)
+//       .send({ message: `user with username: ${username} not found` });
+//   } catch (error) {
+//     res.status(400).send({
+//       message: "Error fetching user profile",
+//       error: error.message,
+//     });
+//   }
+// };
+
 const GetUserProfile = async (req, res) => {
   const { username, id } = req.params;
 
   try {
     const userData = await axios.get(
-      `https://alfa-leetcode-api.onrender.com/userProfile/${username}`
+      ` http://localhost:3000/userProfile/${username}`
     );
+
     if (userData) {
       const data = {
         userId: id,
@@ -108,23 +149,32 @@ const GetUserProfile = async (req, res) => {
           timeZone: "Asia/Kolkata",
         }),
       };
+
       const saveData = new LeetcodeUserDataSchema(data);
       await saveData.save();
-      res.status(200).send({
-        message: "User Data Fetched Succesfully",
+
+      // Send response and exit the function
+      return res.status(200).send({
+        message: "User Data Fetched Successfully",
         response: userData.data,
       });
     }
-    res
+
+    // Send 404 response if userData doesn't exist
+    return res
       .status(404)
-      .send({ message: `user with username: ${username} not found` });
+      .send({ message: `User with username: ${username} not found` });
+
   } catch (error) {
-    res.status(400).send({
+    // Handle errors
+    return res.status(400).send({
       message: "Error fetching user profile",
       error: error.message,
     });
   }
 };
+
+
 
 const updateUserStats = async (req, res) => {
   try {

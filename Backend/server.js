@@ -17,24 +17,26 @@ require("dotenv").config();
 // Middlewears Use
 app.use(bodyParser.json());
 var corsOptions = {
-  origin: process.env.FRONTEND_ORIGIN,
+  origin: process.env.FRONTEND_ORIGIN || "http://localhost:5173",
   methods: "GET, PUT, PATCH, DELETE, POST, HEAD",
   credentials: true,
   allowedHeaders: ["Content-Type", "Authorization"],
 };
 app.use(cors(corsOptions));
+app.options("*", cors(corsOptions)); 
+
 
 // Routes
 app.route("/").get(Home);
-app.route("/profile/:username/:id?").get(GetUserProfile);
-app.route("/getuserdata/:id?").get(getUserDataFromDB);
+app.route("/profile/:username/:id?").get(GetUserProfile); // web se
+app.route("/getuserdata/:id?").get(getUserDataFromDB); // db se
 
 app.route("/login").post(login);
 app.route("/signup").post(signup);
 
-app.route("/profile/:username/:id?").put(updateUserStats);
+app.route("/profile/:username/:id?").put(updateUserStats); //web se
 
-app.route("/delete/:id?").delete(deleteUser);
+app.route("/delete/:id?").delete(deleteUser); // db se
 
 // Connection
 const PORT = process.env.SERVER_PORT;

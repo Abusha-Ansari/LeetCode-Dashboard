@@ -1,13 +1,10 @@
-import GraphStats from '@/ownComponents/GraphStats'
-import AddUserLcINPUT_BOX from '@/ownComponents/LcAccINPUT'
-import React from 'react'
+import { LcAccINPUT } from '@/ownComponents/LcAccINPUT';
 
 function AddProfile() {
   
   return (
     <div className='w-full max-w-[80rem] mx-auto flex flex-col gap-4'>
-    <AddUserLcINPUT_BOX/>
-    <GraphStats/>
+    <LcAccINPUT/>
     </div>
   )
 }
