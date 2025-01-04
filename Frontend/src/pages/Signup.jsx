@@ -20,8 +20,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { LeetCodeContext } from "@/context/UserContext";
+import { useNavigate } from "react-router-dom";
 
 function SignupPage() {
+  const navigate = useNavigate();
 
   const [isVisible, setIsVisible] = useState(false);
    
@@ -69,6 +71,7 @@ function SignupPage() {
       if(response.status == 200){
         response.json().then((data) => notify(data.message));
         setClicked(true)
+        navigate("/login")
       } else{
         notify("Error Signing up Retry sign up")
         setClicked(false)

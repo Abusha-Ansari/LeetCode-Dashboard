@@ -8,7 +8,7 @@ export function LcAccINPUT() {
   
   const [clicked, setClicked] = useState(false);
 
-  const { AccounName, setAccounName} = useContext(LeetCodeContext);
+  const { AccounName, setAccounName } = useContext(LeetCodeContext);
 
   async function handsubmit(e) {
     e.preventDefault();
@@ -18,21 +18,19 @@ export function LcAccINPUT() {
     try {
       const BackendUrl = import.meta.env.VITE_BACKEND_URL;
       const response = await fetch(`${BackendUrl}/profile/${AccounName}/${userID}`);
-      response.json().then((data) => {
+      const data = await response.json()
         if(data.message && data.response){
           console.log('fetch succesfull')
         }
-      });
     } catch (error) {
       console.error(error);
     }
   }
 
   return (
-    // <div className="flex flex-col w-full max-w-xl items-center space-x-2">
+    <>
     <div className="flex flex-col items-center">
       <Label className="m-2 text-xl font-semibold">
-        {" "}
         Enter Your Leetcode Username
       </Label>
       <div className="flex flex-row gap-2">
@@ -47,6 +45,8 @@ export function LcAccINPUT() {
         </Button>
       </div>
     </div>
+    </>
+   
   );
 }
 export default LcAccINPUT;

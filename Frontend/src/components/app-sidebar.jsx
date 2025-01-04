@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/sidebar";
 import { Link } from "react-router-dom";
 import { LeetCodeContext } from "@/context/UserContext";
+import { use } from "react";
 
 export function AppSidebar({ ...props }) {
   const data = {
@@ -36,21 +37,25 @@ export function AppSidebar({ ...props }) {
     ],
   };
 
-  const { loggedIn } = React.useContext(LeetCodeContext);
+  const { loggedIn, user, Logout } = React.useContext(LeetCodeContext);
 
   return (
     <Sidebar {...props}>
-      <SidebarHeader>
+      <SidebarHeader className="mt-3 mb-3">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <a href="/">
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                  <GalleryVerticalEnd className="size-4" />
+                <div className="flex aspect-square size-10 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+                  <span>{user ? user.username[0].toUpperCase() : "A"}</span>
                 </div>
                 <div className="flex flex-col gap-0.5 leading-none">
-                  <span className="font-medium text-lg">LeetDash-USER</span>
-                  <span className="text-sm">v1.0.0</span>
+                  <span className="font-medium text-lg">
+                    {user ? user.username.toUpperCase() : "LeetDash-User"}
+                  </span>
+                  <span className="text-sm">
+                    {user ? user.college : "College"}
+                  </span>
                 </div>
               </a>
             </SidebarMenuButton>
@@ -81,6 +86,17 @@ export function AppSidebar({ ...props }) {
                 <SidebarMenuButton>
                   <Link to="signin" className="">
                     <div className="text-lg">Sign Up</div>
+                  </Link>
+                </SidebarMenuButton>
+              </>
+            )}
+            {loggedIn && (
+              <>
+                <SidebarMenuButton>
+                  <Link to="" className="">
+                    <div className="text-lg" onClick={Logout}>
+                      Log Out
+                    </div>
                   </Link>
                 </SidebarMenuButton>
               </>

@@ -127,16 +127,17 @@ const login = async (req, res) => {
 // };
 
 const GetUserProfile = async (req, res) => {
-  const { username, id } = req.params;
 
+  const { username, id } = req.params;
   try {
     const userData = await axios.get(
-      ` http://localhost:3000/userProfile/${username}`
+      `http://localhost:3000/userProfile/${username}`
     );
 
     if (userData) {
       const data = {
         userId: id,
+        LeetCodeUsername: username,
         userStats: userData.data,
         FetchDate: new Date().toLocaleString("en-US", {
           year: "numeric",
@@ -153,14 +154,12 @@ const GetUserProfile = async (req, res) => {
       const saveData = new LeetcodeUserDataSchema(data);
       await saveData.save();
 
-      // Send response and exit the function
       return res.status(200).send({
         message: "User Data Fetched Successfully",
         response: userData.data,
       });
     }
 
-    // Send 404 response if userData doesn't exist
     return res
       .status(404)
       .send({ message: `User with username: ${username} not found` });
@@ -174,67 +173,131 @@ const GetUserProfile = async (req, res) => {
   }
 };
 
+// const updateUserStats = async (req, res) => {
+//   try {
+//     const { username, id } = req.params;
 
+//     if (!mongoose.Types.ObjectId.isValid(id)) {
+//       res.status(403).send({message: "Invalid ID format"});
+//     }
+
+//     if (!username && !id) {
+//       res.status(400).send({ message: "enter proper data" });
+//     } else {
+//       const userData = await axios.get(
+//         `http://localhost:3000/userProfile/${username}`
+//       );
+
+//       const existingUser = await LeetcodeUserDataSchema.findOne({ userId: id });
+
+//       if (userData && existingUser) {
+//         const data = {
+//           userId: id,
+//           LeetCodeUsername: username,
+//           userStats: userData.data,
+//           FetchDate: new Date().toLocaleString("en-US", {
+//             year: "numeric",
+//             month: "2-digit",
+//             day: "2-digit",
+//             hour: "2-digit",
+//             minute: "2-digit",
+//             second: "2-digit",
+//             hour12: true,
+//             timeZone: "Asia/Kolkata",
+//           }),
+//         };
+//         try {
+//           const updatedData = await LeetcodeUserDataSchema.findByIdAndUpdate(
+//             existingUser._id.toString(),
+//             data,
+//             { new: true, runValidators: true }
+//           );
+
+//           if (!updatedData) {
+//             res
+//               .status(403)
+//               .send({ message: "No user found with the provided ID" });
+//           }
+//           // Updated succesfully
+//           res.status(200).send({ message: "Update Succesfull", response: updatedData});
+//         } catch (error) {
+//           res.status(400).send({ error: error.message });
+//         }
+//       } else {
+//         res
+//           .status(400)
+//           .send({ message: "Invalid input data or user does not exist" });
+//       }
+//     }
+//   } catch (error) {
+//     res.status(400).send({ message: "failed to update data" });
+//   }
+// };
 
 const updateUserStats = async (req, res) => {
   try {
     const { username, id } = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      res.status(403).send("Invalid ID format");
+      return res.status(403).send({ message: "Invalid ID format" });
     }
 
-    if (!username && !id) {
-      res.status(400).send({ message: "enter proper data" });
-    } else {
-      const userData = await axios.get(
-        `https://alfa-leetcode-api.onrender.com/userProfile/${username}`
-      );
+    if (!username || !id) {
+      return res.status(400).send({ message: "Enter proper data" });
+    }
 
-      const existingUser = await LeetcodeUserDataSchema.findOne({ userId: id });
+    const userData = await axios.get(
+      `http://localhost:3000/userProfile/${username}`
+    );
 
-      if (userData && existingUser) {
-        const data = {
-          userId: id,
-          userStats: userData.data,
-          FetchDate: new Date().toLocaleString("en-US", {
-            year: "numeric",
-            month: "2-digit",
-            day: "2-digit",
-            hour: "2-digit",
-            minute: "2-digit",
-            second: "2-digit",
-            hour12: true,
-            timeZone: "Asia/Kolkata",
-          }),
-        };
-        try {
-          const updatedData = await LeetcodeUserDataSchema.findByIdAndUpdate(
-            existingUser._id.toString(),
-            data,
-            { new: true, runValidators: true }
-          );
+    const existingUser = await LeetcodeUserDataSchema.findOne({ userId: id });
 
-          if (!updatedData) {
-            res
-              .status(403)
-              .send({ message: "No user found with the provided ID" });
-          }
-          // Updated succesfully
-          res.status(200).send({ message: "Update Succesfull" });
-        } catch (error) {
-          res.status(400).send({ error: error.message });
+    if (userData && existingUser) {
+      const data = {
+        userId: id,
+        LeetCodeUsername: username,
+        userStats: userData.data,
+        FetchDate: new Date().toLocaleString("en-US", {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          hour12: true,
+          timeZone: "Asia/Kolkata",
+        }),
+      };
+
+      try {
+        const updatedData = await LeetcodeUserDataSchema.findByIdAndUpdate(
+          existingUser._id.toString(),
+          data,
+          { new: true, runValidators: true }
+        );
+
+        if (!updatedData) {
+          return res
+            .status(403)
+            .send({ message: "No user found with the provided ID" });
         }
-      } else {
-        res
-          .status(400)
-          .send({ message: "Invalid input data or user does not exist" });
+
+        return res
+          .status(200)
+          .send({ message: "Update Successful", response: updatedData });
+      } catch (error) {
+        return res.status(400).send({ error: error.message });
       }
     }
+
+    return res
+      .status(400)
+      .send({ message: "Invalid input data or user does not exist" });
   } catch (error) {
-    res.status(400).send({ message: "failed to update data" });
+    return res.status(400).send({ message: "Failed to update data" });
   }
 };
+
 
 const getUserDataFromDB = async (req,res) => {
   const {id} = req.params;
@@ -249,6 +312,22 @@ const getUserDataFromDB = async (req,res) => {
   }
 }
 
+const getUser = async (req,res) => {
+  try {
+    const {id} = req.params;
+
+    if(!id){
+      res.status(400).send({ message: "User id not found" });
+    }
+    const userData = await userSchema.findOne({_id:id});
+    if(!userData){
+      res.status(404).send({message:"User with given id not found"})
+    }
+    res.status(200).send({message:"User data fetched succesfully" , data: userData})
+  } catch (error) {
+    res.status(400).send({message: "Error Occured in getUser" , error: error.message})
+  }
+}
 
 module.exports = {
   Home,
@@ -258,4 +337,5 @@ module.exports = {
   updateUserStats,
   GetUserProfile,
   getUserDataFromDB,
+  getUser,
 };

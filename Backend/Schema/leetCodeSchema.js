@@ -67,6 +67,10 @@ const fetchUserDataLC = new mongoose.Schema({
   userId: {
     type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'userSchema' }]
   },
+  LeetCodeUsername: {
+    type: String,
+    require: true,
+  },
   userStats: {
     type: Object,
     require: true,

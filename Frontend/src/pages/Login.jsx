@@ -13,8 +13,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { LeetCodeContext } from "@/context/UserContext";
+import { useNavigate } from "react-router-dom";
 
 function LoginPage() {
+
+  const navigate = useNavigate()
   
   const [isVisible, setIsVisible] = useState(false);
   
@@ -66,6 +69,7 @@ function LoginPage() {
           if (data.user_id) {
             notify("Login Succesfull");
             setloggedIn(true);
+            navigate("/")
           } else {
             console.error(data.message);
           }

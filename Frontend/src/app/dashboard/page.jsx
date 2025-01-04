@@ -5,6 +5,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import { TextShimmer } from "@/components/ui/text-shimmer";
 import { Outlet } from "react-router-dom";
 
 function Page() {
@@ -16,11 +17,12 @@ function Page() {
           <div className="flex items-center gap-2">
             <SidebarTrigger />
           </div>
-
-          <span className="text-xl font-bold text-center flex-1 sm:text-2xl lg:text-4xl xl:text-5xl">
-            Welcome to LeetDash!
-          </span>
-
+            <TextShimmer
+              duration={1.2}
+              className="text-4xl font-bold [--base-color:theme(colors.blue.600)] [--base-gradient-color:theme(colors.blue.200)] dark:[--base-color:theme(colors.blue.700)] dark:[--base-gradient-color:theme(colors.blue.400)]"
+            >
+              LeetDash
+            </TextShimmer>
           <div className="flex items-center">
             <ModeToggle />
           </div>

@@ -9,6 +9,7 @@ const {
   updateUserStats,
   GetUserProfile,
   getUserDataFromDB,
+  getUser,
 } = require("./Controllers/routesController");
 const ConnectDB = require("./LeetcodeDB");
 const app = express();
@@ -28,15 +29,16 @@ app.options("*", cors(corsOptions));
 
 // Routes
 app.route("/").get(Home);
-app.route("/profile/:username/:id?").get(GetUserProfile); // web se
-app.route("/getuserdata/:id?").get(getUserDataFromDB); // db se
+app.route("/profile/:username/:id?").get(GetUserProfile); // web se user stats
+app.route("/getuserdata/:id?").get(getUserDataFromDB); // db se user stats
+app.route("/user/:id?").get(getUser); // db se user data
 
 app.route("/login").post(login);
 app.route("/signup").post(signup);
 
 app.route("/profile/:username/:id?").put(updateUserStats); //web se
 
-app.route("/delete/:id?").delete(deleteUser); // db se
+app.route("/delete/:id?").delete(deleteUser);
 
 // Connection
 const PORT = process.env.SERVER_PORT;
