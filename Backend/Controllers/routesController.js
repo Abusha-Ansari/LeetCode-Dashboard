@@ -1,7 +1,6 @@
 const axios = require("axios");
 const Z = require("zod");
 const mongoose = require("mongoose");
-const moment = require("moment-timezone");
 const {
   userSchema,
   LeetcodeUserDataSchema,
@@ -9,7 +8,7 @@ const {
 const bcrypt = require("bcrypt");
 
 const Home = (req, res) => {
-  res.status(200).send("Welcome to Digital Wallet");
+  res.status(200).send("Welcome to LeetDash");
 };
 
 const deleteUser = async (req, res) => {
@@ -86,52 +85,13 @@ const login = async (req, res) => {
   }
 };
 
-// const GetUserProfile = async (req, res) => {
-//   const { username, id } = req.params;
-
-//   try {
-//     const userData = await axios.get(
-//       `https://alfa-leetcode-api.onrender.com/userProfile/${username}`
-//     );
-//     if (userData) {
-//       const data = {
-//         userId: id,
-//         userStats: userData.data,
-//         FetchDate: new Date().toLocaleString("en-US", {
-//           year: "numeric",
-//           month: "2-digit",
-//           day: "2-digit",
-//           hour: "2-digit",
-//           minute: "2-digit",
-//           second: "2-digit",
-//           hour12: true,
-//           timeZone: "Asia/Kolkata",
-//         }),
-//       };
-//       const saveData = new LeetcodeUserDataSchema(data);
-//       await saveData.save();
-//       res.status(200).send({
-//         message: "User Data Fetched Succesfully",
-//         response: userData.data,
-//       });
-//     }
-//     res
-//       .status(404)
-//       .send({ message: `user with username: ${username} not found` });
-//   } catch (error) {
-//     res.status(400).send({
-//       message: "Error fetching user profile",
-//       error: error.message,
-//     });
-//   }
-// };
 
 const GetUserProfile = async (req, res) => {
 
   const { username, id } = req.params;
   try {
     const userData = await axios.get(
-      `http://localhost:3000/userProfile/${username}`
+      `https://leetdash-api.vercel.app/userProfile/${username}`
     );
 
     if (userData) {
@@ -173,67 +133,6 @@ const GetUserProfile = async (req, res) => {
   }
 };
 
-// const updateUserStats = async (req, res) => {
-//   try {
-//     const { username, id } = req.params;
-
-//     if (!mongoose.Types.ObjectId.isValid(id)) {
-//       res.status(403).send({message: "Invalid ID format"});
-//     }
-
-//     if (!username && !id) {
-//       res.status(400).send({ message: "enter proper data" });
-//     } else {
-//       const userData = await axios.get(
-//         `http://localhost:3000/userProfile/${username}`
-//       );
-
-//       const existingUser = await LeetcodeUserDataSchema.findOne({ userId: id });
-
-//       if (userData && existingUser) {
-//         const data = {
-//           userId: id,
-//           LeetCodeUsername: username,
-//           userStats: userData.data,
-//           FetchDate: new Date().toLocaleString("en-US", {
-//             year: "numeric",
-//             month: "2-digit",
-//             day: "2-digit",
-//             hour: "2-digit",
-//             minute: "2-digit",
-//             second: "2-digit",
-//             hour12: true,
-//             timeZone: "Asia/Kolkata",
-//           }),
-//         };
-//         try {
-//           const updatedData = await LeetcodeUserDataSchema.findByIdAndUpdate(
-//             existingUser._id.toString(),
-//             data,
-//             { new: true, runValidators: true }
-//           );
-
-//           if (!updatedData) {
-//             res
-//               .status(403)
-//               .send({ message: "No user found with the provided ID" });
-//           }
-//           // Updated succesfully
-//           res.status(200).send({ message: "Update Succesfull", response: updatedData});
-//         } catch (error) {
-//           res.status(400).send({ error: error.message });
-//         }
-//       } else {
-//         res
-//           .status(400)
-//           .send({ message: "Invalid input data or user does not exist" });
-//       }
-//     }
-//   } catch (error) {
-//     res.status(400).send({ message: "failed to update data" });
-//   }
-// };
-
 const updateUserStats = async (req, res) => {
   try {
     const { username, id } = req.params;
@@ -247,7 +146,7 @@ const updateUserStats = async (req, res) => {
     }
 
     const userData = await axios.get(
-      `http://localhost:3000/userProfile/${username}`
+      `https://leetdash-api.vercel.app/userProfile/${username}`
     );
 
     const existingUser = await LeetcodeUserDataSchema.findOne({ userId: id });

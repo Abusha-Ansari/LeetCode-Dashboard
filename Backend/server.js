@@ -22,6 +22,7 @@ var corsOptions = {
   methods: "GET, PUT, PATCH, DELETE, POST, HEAD",
   credentials: true,
   allowedHeaders: ["Content-Type", "Authorization"],
+  
 };
 app.use(cors(corsOptions));
 app.options("*", cors(corsOptions)); 
@@ -41,7 +42,7 @@ app.route("/profile/:username/:id?").put(updateUserStats); //web se
 app.route("/delete/:id?").delete(deleteUser);
 
 // Connection
-const PORT = process.env.SERVER_PORT;
+const PORT = process.env.SERVER_PORT || 3000;
 ConnectDB().then(
   app.listen(PORT, () => {
     console.log(`server is live at port ${PORT}`);
